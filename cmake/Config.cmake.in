@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/glmTargets.cmake")
+
+check_required_components(glm)
+check_required_components(glm_static)
+check_required_components(glm_shared)

@@ -43,7 +43,17 @@ source_group("SIMD Files" FILES ${SIMD_INLINE})
 source_group("SIMD Files" FILES ${SIMD_HEADER})
 
 add_library(glm INTERFACE)
-target_include_directories(glm INTERFACE ../)
+target_include_directories(glm INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+	$<INSTALL_INTERFACE:include>)
+install(TARGETS glm EXPORT glmTargets)
+
+install(FILES ${ROOT_INLINE} ${ROOT_HEADER} DESTINATION include/glm)
+install(FILES ${CORE_INLINE} ${CORE_HEADER} DESTINATION include/glm/detail)
+install(FILES ${EXT_INLINE}  ${EXT_HEADER}  DESTINATION include/glm/ext)
+install(FILES ${GTC_INLINE}  ${GTC_HEADER}  DESTINATION include/glm/gtc)
+install(FILES ${GTX_INLINE}  ${GTX_HEADER}  DESTINATION include/glm/gtx)
+install(FILES ${SIMD_INLINE} ${SIMD_HEADER} DESTINATION include/glm/simd)
 
 if(BUILD_STATIC_LIBS)
 add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
@@ -55,6 +65,7 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
 	target_link_libraries(glm_static PUBLIC glm)
 	add_library(glm::glm_static ALIAS glm_static)
+	install(TARGETS glm_static EXPORT glmTargets)
 endif()
 
 if(BUILD_SHARED_LIBS)
@@ -67,4 +78,5 @@ add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${SIMD_SOURCE}    ${SIMD_INLINE}    ${SIMD_HEADER})
 	target_link_libraries(glm_shared PUBLIC glm)
 	add_library(glm::glm_shared ALIAS glm_shared)
+	install(TARGETS glm_shared EXPORT glmTargets)
 endif()
